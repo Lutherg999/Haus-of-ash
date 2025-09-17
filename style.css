@@ -131,6 +131,22 @@ body {
   color: #D4AF37;
 }
 
+/* Button group for product variant buttons (perfume, oil, detergent) */
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Ensure clickable cards (anchors) inherit colours and remove underline */
+a.card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
   .hero {
