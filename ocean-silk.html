@@ -8,16 +8,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="cart.html">Cart</a>
+  </nav>
   <header class="hero">
     <div class="overlay">
       <h1 class="logo"><span class="silver">HAUS OF</span> <span class="gold">ASH</span></h1>
       <h2 class="product-title">Ocean Silk</h2>
       <p class="tagline">Salt air and soft woods, fluid and eternal.</p>
-      <!-- Button group for purchasing perfume, oil or detergent -->
+      <!-- Button group for adding items to the cart -->
       <div class="button-group">
-        <a href="mailto:hausofash@gmail.com?subject=Purchase%20Ocean%20Silk%20Perfume" class="btn">Buy Perfume</a>
-        <a href="mailto:hausofash@gmail.com?subject=Purchase%20Ocean%20Silk%20Oil" class="btn">Buy Oil</a>
-        <a href="mailto:hausofash@gmail.com?subject=Purchase%20Ocean%20Silk%20Laundry%20Detergent" class="btn">Buy Detergent</a>
+        <a href="javascript:void(0)" onclick="addToCart('Ocean Silk','Perfume')" class="btn">Add Perfume to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Ocean Silk','Oil')" class="btn">Add Oil to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Ocean Silk','Laundry Detergent')" class="btn">Add Detergent to Cart</a>
       </div>
     </div>
   </header>
@@ -33,5 +39,15 @@
     <p>Email us at <a href="mailto:hausofash@gmail.com">hausofash@gmail.com</a></p>
     <p>Follow us on Instagram: <strong>#hausofashalchemist</strong></p>
   </section>
+
+  <!-- Cart helper script -->
+  <script>
+    function addToCart(product, variant) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart.push({ product, variant });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(product + ' (' + variant + ') added to cart.');
+    }
+  </script>
 </body>
-</h>tml>
+</html>
