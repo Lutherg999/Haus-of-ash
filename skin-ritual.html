@@ -23,9 +23,15 @@
       <p class="tagline">A whisper of skin, musk, and smoke — intimate alchemy.</p>
       <!-- Button group for adding items to the cart -->
       <div class="button-group">
-        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Perfume')" class="btn">Add Perfume to Cart</a>
-        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Oil')" class="btn">Add Oil to Cart</a>
-        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Laundry Detergent')" class="btn">Add Detergent to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Perfume',75)" class="btn">Add Perfume to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Oil',45)" class="btn">Add Oil to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Skin Ritual','Laundry Detergent',30)" class="btn">Add Detergent to Cart</a>
+      </div>
+      <!-- Payment button group for credit card purchases -->
+      <div class="button-group">
+        <a href="https://example.com/pay/Skin-Ritual-Perfume" class="btn">Buy Perfume with Credit Card</a>
+        <a href="https://example.com/pay/Skin-Ritual-Oil" class="btn">Buy Oil with Credit Card</a>
+        <a href="https://example.com/pay/Skin-Ritual-Detergent" class="btn">Buy Detergent with Credit Card</a>
       </div>
     </div>
   </header>
@@ -47,9 +53,15 @@
 
   <!-- Cart helper script -->
   <script>
-    function addToCart(product, variant) {
+    function addToCart(product, variant, price) {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      cart.push({ product, variant });
+      // Check if this item/variant/price combo already exists and increment quantity
+      const existing = cart.find(item => item.product === product && item.variant === variant && item.price === price);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ product, variant, price, quantity: 1 });
+      }
       localStorage.setItem('cart', JSON.stringify(cart));
       alert(product + ' (' + variant + ') added to cart.');
     }

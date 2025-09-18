@@ -33,6 +33,7 @@
     <p>Follow us on Instagram: <strong>#hausofashalchemist</strong></p>
   </section>
   <script>
+    // Render the cart with Shopify‑like quantity and price controls
     function renderCart() {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
       const container = document.getElementById('cart-items');
@@ -40,16 +41,52 @@
         container.innerHTML = '<p>Your cart is empty.</p>';
         return;
       }
-      let html = '<ul style="list-style: none; padding: 0;">';
-      cart.forEach(item => {
-        html += '<li>' + item.product + ' (' + item.variant + ')' + '</li>';
+      let html = '<table class="cart-table">';
+      html += '<tr><th>Item</th><th>Variant</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th></tr>';
+      // Build rows for each cart item
+      cart.forEach((item, index) => {
+        const lineTotal = (item.price * item.quantity).toFixed(2);
+        html += '<tr>';
+        html += '<td>' + item.product + '</td>';
+        html += '<td>' + item.variant + '</td>';
+        html += '<td>$' + item.price.toFixed(2) + '</td>';
+        html += '<td>' +
+          '<button onclick="updateQuantity(' + index + ', -1)">−</button> ' + item.quantity + ' <button onclick="updateQuantity(' + index + ', 1)">+</button>' +
+          '</td>';
+        html += '<td>$' + lineTotal + '</td>';
+        html += '<td><button onclick="removeItem(' + index + ')">Remove</button></td>';
+        html += '</tr>';
       });
-      html += '</ul>';
-      const body = cart.map(item => item.product + ' (' + item.variant + ')').join('\n');
-      const mailto = 'mailto:hausofash@gmail.com?subject=Order%20Request&body=' + encodeURIComponent(body);
+      // Calculate total
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      html += '<tr><td colspan="4" style="text-align:right;"><strong>Total</strong></td><td><strong>$' + total.toFixed(2) + '</strong></td><td></td></tr>';
+      html += '</table>';
+      // Build mailto link with order summary
+      const bodyLines = cart.map(item => item.quantity + '× ' + item.product + ' (' + item.variant + ') - $' + (item.price * item.quantity).toFixed(2));
+      bodyLines.push('Total: $' + total.toFixed(2));
+      const mailto = 'mailto:hausofash@gmail.com?subject=Order%20Request&body=' + encodeURIComponent(bodyLines.join('\n'));
       html += '<p><a href="' + mailto + '" class="btn">Checkout via Email</a></p>';
       container.innerHTML = html;
     }
+    // Update quantity of an item in the cart
+    function updateQuantity(index, delta) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (!cart[index]) return;
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+    // Remove an item from the cart
+    function removeItem(index) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+    // Render the cart when the page loads
     document.addEventListener('DOMContentLoaded', renderCart);
   </script>
 </body>

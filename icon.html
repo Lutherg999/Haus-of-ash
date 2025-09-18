@@ -21,9 +21,9 @@
       <p class="tagline">Modern wood and resin, a presence you can't ignore.</p>
       <!-- Button group for adding items to the cart -->
       <div class="button-group">
-        <a href="javascript:void(0)" onclick="addToCart('Icon','Perfume')" class="btn">Add Perfume to Cart</a>
-        <a href="javascript:void(0)" onclick="addToCart('Icon','Oil')" class="btn">Add Oil to Cart</a>
-        <a href="javascript:void(0)" onclick="addToCart('Icon','Laundry Detergent')" class="btn">Add Detergent to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Icon','Perfume',75)" class="btn">Add Perfume to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Icon','Oil',45)" class="btn">Add Oil to Cart</a>
+        <a href="javascript:void(0)" onclick="addToCart('Icon','Laundry Detergent',30)" class="btn">Add Detergent to Cart</a>
       </div>
     </div>
   </header>
@@ -42,9 +42,14 @@
 
   <!-- Cart helper script -->
   <script>
-    function addToCart(product, variant) {
+    function addToCart(product, variant, price) {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      cart.push({ product, variant });
+      const existing = cart.find(item => item.product === product && item.variant === variant && item.price === price);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ product, variant, price, quantity: 1 });
+      }
       localStorage.setItem('cart', JSON.stringify(cart));
       alert(product + ' (' + variant + ') added to cart.');
     }
